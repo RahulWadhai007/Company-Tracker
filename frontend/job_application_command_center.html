@@ -1,0 +1,362 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+:root {
+  --teal: #0D9488;
+  --teal-light: #CCFBF1;
+  --teal-text: #0F766E;
+  --bg: #F9FAFB;
+  --surface: #FFFFFF;
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --border: rgba(0,0,0,0.08);
+  --border-md: rgba(0,0,0,0.12);
+  --radius: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+}
+.shell { background: var(--bg); min-height: 600px; padding: 0; font-size: 14px; color: var(--text-primary); }
+.topbar { background: var(--surface); border-bottom: 0.5px solid var(--border-md); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.brand { font-size: 15px; font-weight: 500; color: var(--text-primary); letter-spacing: -0.01em; }
+.brand span { color: var(--teal); }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.filter-select { font-family: var(--font-sans); font-size: 13px; color: var(--text-secondary); background: var(--surface); border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 6px 10px; cursor: pointer; outline: none; }
+.filter-select:hover { border-color: rgba(0,0,0,0.2); }
+.btn-primary { font-family: var(--font-sans); font-size: 13px; font-weight: 500; color: #fff; background: var(--teal); border: none; border-radius: var(--radius); padding: 7px 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.15s; }
+.btn-primary:hover { background: #0F766E; }
+.btn-back { font-family: var(--font-sans); font-size: 13px; color: var(--teal); background: none; border: 0.5px solid rgba(13,148,136,0.3); border-radius: var(--radius); padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-back:hover { background: var(--teal-light); }
+.content { padding: 24px; }
+.section-label { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px; }
+.kanban { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.col { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-md); padding: 14px; }
+.col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.col-title { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.col-count { font-size: 11px; font-weight: 500; color: var(--text-muted); background: var(--bg); border-radius: 20px; padding: 2px 8px; }
+.card { background: var(--surface); border: 0.5px solid var(--border-md); border-radius: var(--radius); padding: 13px 14px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; margin-bottom: 8px; position: relative; }
+.card:last-child { margin-bottom: 0; }
+.card:hover { border-color: rgba(13,148,136,0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.card.active { border-left: 3px solid var(--teal); padding-left: 11px; box-shadow: 0 2px 12px rgba(13,148,136,0.12); }
+.card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.company-pill { display: flex; align-items: center; gap: 7px; }
+.avatar { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.av-g { background: #DBEAFE; color: #1E40AF; }
+.av-m { background: #EDE9FE; color: #5B21B6; }
+.av-t { background: #FEE2E2; color: #991B1B; }
+.av-z { background: #FEF3C7; color: #92400E; }
+.company-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.badge { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 20px; }
+.badge-applied { background: #EFF6FF; color: #1E40AF; }
+.badge-assessment { background: #FFFBEB; color: #92400E; }
+.badge-interview { background: #ECFDF5; color: #065F46; }
+.card-role { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.card-deadline { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-muted); display: inline-block; }
+.detail-panel { background: var(--surface); border: 0.5px solid var(--border-md); border-radius: var(--radius-lg); overflow: hidden; }
+.detail-header { padding: 20px 24px 18px; border-bottom: 0.5px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; }
+.detail-company { display: flex; align-items: center; gap: 12px; }
+.avatar-lg { width: 40px; height: 40px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+.detail-title { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 3px; }
+.detail-sub { font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+.detail-body { display: grid; grid-template-columns: 1fr 1fr; }
+.alerts-section { padding: 18px 20px; border-right: 0.5px solid var(--border); }
+.feed-section { padding: 18px 20px; }
+.section-title { font-size: 12px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.section-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.toggle-row:last-child { border-bottom: none; }
+.toggle-label { display: flex; flex-direction: column; gap: 2px; }
+.toggle-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+.toggle-hint { font-size: 11px; color: var(--text-muted); }
+.toggle { position: relative; width: 34px; height: 19px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #E5E7EB; border-radius: 19px; cursor: pointer; transition: 0.2s; }
+.slider:before { content: ''; position: absolute; height: 14px; width: 14px; left: 2px; bottom: 2.5px; background: white; border-radius: 50%; transition: 0.2s; }
+input:checked + .slider { background: var(--teal); }
+input:checked + .slider:before { transform: translateX(15px); }
+.feed { display: flex; flex-direction: column; gap: 0; max-height: 240px; overflow-y: auto; }
+.feed-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+.feed-item:last-child { border-bottom: none; }
+.feed-icon { width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.icon-gmail { background: #FEF2F2; }
+.icon-linkedin { background: #EFF6FF; }
+.feed-content { flex: 1; }
+.feed-from { font-size: 11px; font-weight: 500; color: var(--text-primary); }
+.feed-msg { font-size: 11px; color: var(--text-secondary); margin-top: 1px; line-height: 1.4; }
+.feed-time { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.alert-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; display: inline-block; margin-left: 4px; vertical-align: middle; }
+.hidden { display: none; }
+.pipe-wrap { }
+.status-strip { display: flex; gap: 8px; margin-bottom: 18px; }
+.stat-pill { font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 20px; background: var(--bg); border: 0.5px solid var(--border-md); color: var(--text-secondary); }
+.stat-pill span { color: var(--text-primary); }
+.detail-wrap { display: flex; flex-direction: column; gap: 14px; }
+.detail-and-pipe { display: grid; grid-template-columns: 1fr; gap: 16px; }
+</style>
+
+<div class="shell">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand">Job<span>Command</span></div>
+      <div class="status-strip" id="statusStrip">
+        <!-- Will be dynamically generated via JS -->
+      </div>
+    </div>
+    <div class="topbar-right">
+      <select class="filter-select" id="filterSel" onchange="applyFilter()">
+        <option value="all">All statuses</option>
+        <option value="Applied">Applied</option>
+        <option value="Assessment">Assessment</option>
+        <option value="Interview">Interview</option>
+      </select>
+      <button class="btn-primary" onclick="simulateAlert()">+ Simulate New Alert</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="detail-and-pipe" id="mainArea">
+      <div id="detailWrap" class="detail-wrap hidden"></div>
+      <div class="pipe-wrap">
+        <div class="section-label">Application Pipeline</div>
+        <div class="kanban" id="kanban"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+let apps = [];
+let isLoading = false;
+let fetchError = '';
+
+const toggles = [
+  { id: 't1', name: 'WhatsApp Alerts', hint: 'Urgent deadline reminders', checked: true },
+  { id: 't2', name: 'Telegram Notifications', hint: 'Status change updates', checked: false },
+  { id: 't3', name: 'Email Digest', hint: 'Daily application summary', checked: true },
+  { id: 't4', name: 'Push Notifications', hint: 'New recruiter messages', checked: false }
+];
+
+const badgeClass = { Applied: 'badge-applied', Assessment: 'badge-assessment', Interview: 'badge-interview' };
+const cols = ['Applied', 'Assessment', 'Interview'];
+const colTitles = { Applied: 'Applied', Assessment: 'Assessment Pending', Interview: 'Interview Scheduled' };
+
+let activeId = null;
+let filterVal = 'all';
+let toggleStates = {};
+toggles.forEach(t => toggleStates[t.id] = t.checked);
+
+function gmailSvg() {
+  return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" fill="#FEE2E2"/><path d="M2 7l10 7 10-7" stroke="#DC2626" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+function linkedinSvg() {
+  return `<svg width="14" height="14" viewBox="0 0 24 24" fill="#2563EB" xmlns="http://www.w3.org/2000/svg"><path d="M6.5 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM5 10h3v9H5v-9zm5.5 0H13v1.2c.4-.7 1.4-1.4 2.7-1.4 2.9 0 3.3 1.9 3.3 4.4V19h-3v-4.3c0-1-.4-2-1.5-2s-1.5 1-1.5 2V19h-3v-9z"/></svg>`;
+}
+function calSvg() {
+  return `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+}
+
+function normalizeApp(app) {
+  const status = ['Applied', 'Assessment', 'Interview'].includes(app.status) ? app.status : 'Applied';
+  const col = ['Applied', 'Assessment', 'Interview'].includes(app.col) ? app.col : status;
+  return {
+    id: app.id,
+    company: app.company || 'Unknown Company',
+    role: app.role || 'Unknown Role',
+    status,
+    col,
+    deadline: app.deadline || 'No deadline',
+    comms: Array.isArray(app.comms) ? app.comms : []
+  };
+}
+
+async function loadApplications() {
+  isLoading = true;
+  fetchError = '';
+  renderKanban();
+
+  try {
+    const response = await fetch('/api/applications', { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const rawApps = Array.isArray(payload) ? payload : (Array.isArray(payload.data) ? payload.data : []);
+    apps = rawApps.map(normalizeApp);
+  } catch (error) {
+    console.error('Failed to load applications:', error);
+    apps = [];
+    fetchError = 'Unable to load applications. Check backend at http://localhost:5000.';
+  } finally {
+    isLoading = false;
+    activeId = null;
+    const detailWrap = document.getElementById('detailWrap');
+    detailWrap.classList.add('hidden');
+    detailWrap.innerHTML = '';
+    renderKanban();
+  }
+}
+
+function updateStats() {
+  const total = apps.length;
+  const counts = { Applied: 0, Assessment: 0, Interview: 0 };
+  apps.forEach(a => { if(counts[a.col] !== undefined) counts[a.col]++; });
+  
+  document.getElementById('statusStrip').innerHTML = `
+    <div class="stat-pill"><span>${total}</span> Total</div>
+    <div class="stat-pill"><span>${counts.Applied}</span> Applied</div>
+    <div class="stat-pill"><span>${counts.Assessment}</span> Assessment</div>
+    <div class="stat-pill"><span>${counts.Interview}</span> Interview</div>
+  `;
+}
+
+function renderKanban() {
+  const kb = document.getElementById('kanban');
+  updateStats();
+
+  if (isLoading) {
+    kb.innerHTML = `<div class="col" style="grid-column: 1 / -1; text-align: center; padding: 24px;">Loading latest applications...</div>`;
+    return;
+  }
+
+  if (fetchError) {
+    kb.innerHTML = `<div class="col" style="grid-column: 1 / -1; text-align: center; padding: 24px; color: #991B1B;">${fetchError}</div>`;
+    return;
+  }
+
+  const filtered = filterVal === 'all' ? apps : apps.filter(a => a.status === filterVal);
+  let html = '';
+  cols.forEach(col => {
+    const colApps = filtered.filter(a => a.col === col);
+    html += `<div class="col">
+      <div class="col-header">
+        <span class="col-title">${colTitles[col]}</span>
+        <span class="col-count">${colApps.length}</span>
+      </div>`;
+    colApps.forEach(app => {
+      const isActive = activeId === app.id;
+      html += `<div class="card${isActive ? ' active' : ''}" onclick="selectApp(${app.id})">
+        <div class="card-top">
+          <div class="company-pill">
+            <div class="avatar av-default" style="background:#DBEAFE; color:#1E40AF;">${app.company.charAt(0).toUpperCase()}</div>
+            <span class="company-name">${app.company}</span>
+          </div>
+          <span class="badge ${badgeClass[app.status] || 'badge-applied'}">${app.status}</span>
+        </div>
+        <div class="card-role">${app.role}</div>
+        <div class="card-deadline">${calSvg()} Due ${app.deadline}</div>
+      </div>`;
+    });
+    if (colApps.length === 0) {
+      html += `<div style="padding: 18px 0; text-align: center; font-size: 12px; color: var(--text-muted);">No applications</div>`;
+    }
+    html += `</div>`;
+  });
+  kb.innerHTML = html;
+}
+
+function renderDetail(app) {
+  const dw = document.getElementById('detailWrap');
+  const comms = Array.isArray(app.comms) ? app.comms : [];
+  const togsHtml = toggles.map(t => `
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="toggle-name">${t.name}${t.id === 't1' ? '<span class="alert-dot"></span>' : ''}</span>
+        <span class="toggle-hint">${t.hint}</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${toggleStates[t.id] ? 'checked' : ''} onchange="toggleStates['${t.id}']=this.checked">
+        <span class="slider"></span>
+      </label>
+    </div>`).join('');
+  const commsHtml = comms.length === 0
+    ? `<div style="padding: 10px 0; font-size: 11px; color: var(--text-muted);">No communication yet</div>`
+    : comms.map(c => `
+    <div class="feed-item">
+      <div class="feed-icon ${c.type === 'gmail' ? 'icon-gmail' : 'icon-linkedin'}">${c.type === 'gmail' ? gmailSvg() : linkedinSvg()}</div>
+      <div class="feed-content">
+        <div class="feed-from">${c.from}</div>
+        <div class="feed-msg">${c.msg}</div>
+        <div class="feed-time">${c.time}</div>
+      </div>
+    </div>`).join('');
+  dw.innerHTML = `
+    <div class="detail-panel">
+      <div class="detail-header">
+        <div class="detail-company">
+          <div class="avatar-lg av-default" style="background:#DBEAFE; color:#1E40AF;">${app.company.charAt(0).toUpperCase()}</div>
+          <div>
+            <div class="detail-title">${app.company} — ${app.role}</div>
+            <div class="detail-sub">
+              <span class="badge ${badgeClass[app.status]}">${app.status}</span>
+              <span style="color:var(--text-muted)">${calSvg()} Due ${app.deadline}</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-back" onclick="clearDetail()">&#8592; Back</button>
+      </div>
+      <div class="detail-body">
+        <div class="alerts-section">
+          <div class="section-title">Alert Preferences</div>
+          <div class="section-desc">Manage notifications for this application</div>
+          ${togsHtml}
+        </div>
+        <div class="feed-section">
+          <div class="section-title">Communication History</div>
+          <div class="section-desc">${comms.length} messages · Gmail &amp; LinkedIn</div>
+          <div class="feed">${commsHtml}</div>
+        </div>
+      </div>
+    </div>`;
+  dw.classList.remove('hidden');
+}
+
+function selectApp(id) {
+  activeId = id;
+  const app = apps.find(a => a.id === id);
+  if (!app) {
+    clearDetail();
+    return;
+  }
+  renderKanban();
+  renderDetail(app);
+}
+
+function clearDetail() {
+  activeId = null;
+  document.getElementById('detailWrap').classList.add('hidden');
+  document.getElementById('detailWrap').innerHTML = '';
+  renderKanban();
+}
+
+function applyFilter() {
+  filterVal = document.getElementById('filterSel').value;
+  renderKanban();
+}
+
+function simulateAlert() {
+  const samples = [
+    { company: 'Google', msg: 'New message from Google Recruiter on LinkedIn!', type: 'linkedin' },
+    { company: 'Tesla', msg: 'Interview reminder: Tomorrow at 3 PM IST', type: 'gmail' },
+    { company: 'Microsoft', msg: 'Assessment deadline in 24 hours!', type: 'gmail' },
+    { company: 'Zomato', msg: 'Application status updated to Interview', type: 'linkedin' }
+  ];
+  const s = samples[Math.floor(Math.random() * samples.length)];
+  const app = apps.find(a => a.company === s.company);
+  if (app) {
+    app.comms.unshift({ type: s.type, from: s.type === 'gmail' ? `${s.company} Recruiter` : `${s.company} HR`, msg: s.msg, time: 'Just now' });
+    if (activeId === app.id) renderDetail(app);
+  }
+  const note = document.createElement('div');
+  note.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#111827;color:white;padding:10px 16px;border-radius:8px;font-size:12px;z-index:999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);max-width:260px;';
+  note.innerHTML = `<span style="width:8px;height:8px;border-radius:50%;background:${s.type === 'gmail' ? '#EF4444' : '#2563EB'};flex-shrink:0;display:inline-block;"></span><span>${s.msg}</span>`;
+  document.body.appendChild(note);
+  setTimeout(() => note.remove(), 3000);
+}
+
+document.addEventListener('DOMContentLoaded', loadApplications);
+</script>
